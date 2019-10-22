@@ -1,0 +1,95 @@
+CREATE TABLE IF NOT EXISTS users (
+	id SERIAL PRIMARY KEY,
+    full_name VARCHAR NOT NULL,
+    password VARCHAR NOT NULL,
+    email VARCHAR NOT NULL UNIQUE,
+    isEnabled BOOL
+);
+
+CREATE TABLE IF NOT EXISTS addresses (
+	id SERIAL PRIMARY KEY,
+	town VARCHAR NOT NULL,
+	street VARCHAR NOT NULL,
+	number INTEGER NOT NULL,
+	phoneNumber INTEGER NOT NULL,
+	floor INTEGER NOT NULL,
+	block INTEGER NOT NULL,
+	apartment INTEGER NOT NULL,
+	entrance CHAR NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS users_addresses (
+	user_id INTEGER NOT NULL,
+    address_id INTEGER NOT NULL,
+	PRIMARY KEY (user_id, address_id),
+  	FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE,
+  	FOREIGN KEY (address_id) REFERENCES addresses(id) ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS roles (
+	id SERIAL PRIMARY KEY,
+    role VARCHAR NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS users_roles (
+	user_id INTEGER NOT NULL,
+    role_id INTEGER NOT NULL,
+	PRIMARY KEY (user_id, role_id),
+  	FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE,
+  	FOREIGN KEY (role_id) REFERENCES roles(id) ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS pizzas (
+	id SERIAL PRIMARY KEY,
+    name VARCHAR NOT NULL UNIQUE,
+	price DECIMAL NOT NULL,
+	description VARCHAR NOT NULL,
+	image_url VARCHAR NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS ingredients (
+	id SERIAL PRIMARY KEY,
+    name VARCHAR NOT NULL,
+	price DECIMAL NOT NULL,
+	category VARCHAR NOT NULL,
+	pizza_id INTEGER,
+	FOREIGN KEY (pizza_id) REFERENCES pizzas(id) ON DELETE CASCADE
+);
+
+/*
+	Still working in progress
+*/
+CREATE TABLE IF NOT EXISTS orders (
+	id SERIAL PRIMARY KEY,
+    isTaken BOOL,
+	isFinished BOOL,
+	taken_on TIMESTAMP,
+	finished_on TIMESTAMP,
+	total_price DECIMAL NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS orders_pizzas (
+	order_id INTEGER NOT NULL,
+    pizza_id INTEGER NOT NULL,
+	PRIMARY KEY (order_id, pizza_id),
+  	FOREIGN KEY (order_id) REFERENCES orders(id) ON UPDATE CASCADE,
+  	FOREIGN KEY (pizza_id) REFERENCES pizzas(id) ON UPDATE CASCADE
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
